@@ -145,12 +145,23 @@ axios.get(API_URL)
     });
 
 navigator.geolocation.getCurrentPosition(location =>{
-        console.log(location);
-        const lat = location.coords.latitude || 11.127;
-        const lon = location.coords.longitude || 78.657;
+        const lat = location.coords.latitude ;
+        const lon = location.coords.longitude ;
         Load_weather(lat,lon);
     }, error =>{
         console.log(error);
+        axios.get('https://api.ipify.org?format=json',response=>{
+            return response.data;    
+        }).then(response => {
+            return axios.get(`http://api.ipstack.com/${response.data.ip}?access_key=956bf4c8c3ed3a51fb49c84bc27463ef`)
+        }).then(response =>{
+            const lat = response.data.latitude ;
+            const lon = response.data.longitude ;
+            Load_weather(lat,lon);
+            console.log(lat,lon);
+        }).catch(error=>{
+            console.log(error);
+        })
     });
 
 
